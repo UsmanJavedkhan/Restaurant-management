@@ -43,7 +43,10 @@ async function submit() {
                 <div v-if="['login','admin'].includes(mode)" class="auth-options full-width"><label class="check-label"><input v-model="form.remember" type="checkbox"> Remember me</label><router-link to="/forgot-password">Forgot password?</router-link></div>
                 <button class="button full-width" :disabled="busy" type="submit">{{ busy ? 'Please wait…' : mode === 'register' ? 'Create account' : mode === 'forgot' ? 'Send reset link' : mode === 'reset' ? 'Reset password' : 'Sign in' }} <span>→</span></button>
             </form>
-            <p v-if="mode === 'register'" class="auth-footnote">Already a regular? <router-link to="/login">Sign in</router-link></p><p v-else class="auth-footnote"><router-link :to="mode === 'forgot' || mode === 'reset' ? '/login' : '/register'">{{ mode === 'forgot' || mode === 'reset' ? 'Back to sign in' : 'New around here? Create an account' }}</router-link></p>
+            <p v-if="mode === 'register'" class="auth-footnote">Already a regular? <router-link to="/login">Sign in</router-link></p>
+            <p v-else-if="mode === 'admin'" class="auth-footnote"><router-link to="/login">Customer sign in</router-link></p>
+            <p v-else class="auth-footnote"><router-link :to="mode === 'forgot' || mode === 'reset' ? '/login' : '/register'">{{ mode === 'forgot' || mode === 'reset' ? 'Back to sign in' : 'New around here? Create an account' }}</router-link></p>
+            <p v-if="mode === 'login'" class="auth-footnote">Managing the restaurant? <router-link to="/admin/login">Admin sign in</router-link></p>
         </div>
     </section>
 </template>

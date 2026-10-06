@@ -8,13 +8,23 @@ use Illuminate\Support\Str;
 
 class CreateRestaurantAdmin extends Command
 {
-    protected $signature = 'restaurant:admin {email} {--name=Restaurant Admin} {--generate : Generate a random password for a new local admin}';
+    protected $signature = 'restaurant:admin {email} {--name=Restaurant Admin} {--if-missing : Create an administrator only when no administrator exists} {--generate : Generate a random password for a new local admin}';
 
     protected $description = 'Create a restaurant administrator without publishing default credentials';
 
     public function handle(): int
     {
         $email = Str::lower($this->argument('email'));
+        if ($this->option('if-missing')) {
+            $administrator = User::where('role', 'admin')->first(['email', 'is_active']);
+            if ($administrator) {
+                $status = $administrator->is_active ? 'active' : 'inactive';
+                $this->info('Administrator already exists: '.$administrator->email.' ('.$status.'). No account created.');
+
+                return self::SUCCESS;
+            }
+        }
+
         if (! filter_var($email, FILTER_VALIDATE_EMAIL) || User::where('email', $email)->exists()) {
             $this->error('Enter a valid email that is not already registered.');
 

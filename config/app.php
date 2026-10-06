@@ -28,6 +28,8 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
+    'trusted_proxies' => env('TRUSTED_PROXIES', env('RENDER', false) ? '*' : null),
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
